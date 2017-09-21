@@ -1,10 +1,8 @@
 package com.daria.example.wallpaper.wallpaperhd.activities;
 
 
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,9 +20,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.daria.example.wallpaper.wallpaperhd.R;
 import com.daria.example.wallpaper.wallpaperhd.adapters.GridImageAdapter;
 import com.daria.example.wallpaper.wallpaperhd.adapters.TagsAdapter;
-import com.daria.example.wallpaper.wallpaperhd.fragments.GridImageFragment;
 import com.daria.example.wallpaper.wallpaperhd.utilities.MockUtils;
-import com.github.jorgecastilloprz.FABProgressCircle;
 
 import static com.daria.example.wallpaper.wallpaperhd.R.drawable.ic_arrow_back_white_24dp;
 
@@ -72,7 +68,7 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
         tagsRecycleView = (RecyclerView) findViewById(R.id.image_tags_recycle_view);
         tagsAdapter = new TagsAdapter(this);
         RecyclerView.LayoutManager tagLayoutManager = new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, true);
+                LinearLayoutManager.HORIZONTAL, false);
 
         tagsRecycleView.setAdapter(tagsAdapter);
         tagsRecycleView.setLayoutManager(tagLayoutManager);
@@ -82,6 +78,7 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
         gridImageAdapter = new GridImageAdapter(MockUtils.getMockUrl(this), this);
         similarImagesRecycleView.setLayoutManager(similarImagesLayoutManager);
         similarImagesRecycleView.setAdapter(gridImageAdapter);
+        similarImagesRecycleView.setNestedScrollingEnabled(false);
     }
 
     private void loadImage() {
