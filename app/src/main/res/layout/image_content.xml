@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_image">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@drawable/grey_gradient"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_margin="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/image_name"
+                android:textSize="15sp"
+                android:text="abstract"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:text="Some vary vary useful information"
+                android:id="@+id/image_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+           <android.support.v7.widget.RecyclerView
+               android:layout_marginTop="20dp"
+               android:id="@+id/image_tags_recycle_view"
+               android:layout_width="match_parent"
+               android:layout_height="20dp"/>
+
+            <TextView
+                android:layout_marginTop="30dp"
+                android:text="@string/similar_images"
+                android:id="@+id/image_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <fragment
+            android:id="@+id/similar_images_fragment"
+            android:name="com.daria.example.wallpaper.wallpaperhd.fragments.GridImageFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_grid_images"/>
+    </LinearLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

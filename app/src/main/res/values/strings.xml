@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">WallPaper HD</string>
+    <string name="history_title">History</string>
+    <string name="category_title">Categories</string>
+    <string name="new_images_title">new</string>
+    <string name="top_title">Top</string>
+    <string name="some_tab">Some tab</string>
+    <string name="favourite_title">Favourite</string>
+    <string name="complaint_title">Complaint</string>
+    <string name="similar_images">Similar images</string>
+</resources>

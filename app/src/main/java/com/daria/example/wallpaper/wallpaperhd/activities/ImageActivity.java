@@ -1,0 +1,80 @@
+package com.daria.example.wallpaper.wallpaperhd.activities;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.daria.example.wallpaper.wallpaperhd.R;
+import com.daria.example.wallpaper.wallpaperhd.adapters.TagsAdapter;
+
+
+public class ImageActivity extends AppCompatActivity {
+
+    private ImageView imageView;
+    private Toolbar toolbar;
+    private RecyclerView tagsRecycleView;
+    private TagsAdapter tagsAdapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_image);
+
+        toolbar = (Toolbar) findViewById(R.id.single_image_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setNavigationIcon(getDrawable(R.drawable.ic_arrow_back_white_24dp));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        tagsRecycleView = (RecyclerView) findViewById(R.id.image_tags_recycle_view);
+
+        tagsAdapter = new TagsAdapter(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false);
+
+        tagsRecycleView.setAdapter(tagsAdapter);
+        tagsRecycleView.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.single_image_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.favourite: {
+                addToFavourite(item);
+                return true;
+            }
+            case R.id.complaint: {
+                Toast.makeText(this, "This is not working yet", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void addToFavourite(MenuItem item) {
+        if (item.getIcon().equals(getDrawable(R.drawable.ic_star_border_white_24dp)))
+            item.setIcon(R.drawable.ic_star_white_24dp);
+        else item.setIcon(R.drawable.ic_star_border_white_24dp);
+    }
+}

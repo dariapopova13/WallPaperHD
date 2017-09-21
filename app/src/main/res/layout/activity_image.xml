@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.daria.example.wallpaper.wallpaperhd.activities.ImageActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/image_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/image_app_bar"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/image_backrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <ImageView
+                android:id="@+id/single_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/splash_background"
+                app:layout_collapseMode="parallax"/>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/single_image_toolbar"
+                style="@style/ThemeOverlay.AppCompat.Light"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"/>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/image_content"/>
+
+    <com.github.jorgecastilloprz.FABProgressCircle
+        android:id="@+id/image_progress_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/image_fab_margin"
+        app:arcColor="@color/fab_orange_dark"
+        app:arcWidth="2dp"
+        app:finalIcon="@drawable/ic_check_white_24dp"
+        app:layout_anchor="@id/image_app_bar"
+        app:layout_anchorGravity="bottom|right|end">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/image_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:src="@drawable/ic_arrow_downward_white_24dp"/>
+    </com.github.jorgecastilloprz.FABProgressCircle>
+
+
+</android.support.design.widget.CoordinatorLayout>

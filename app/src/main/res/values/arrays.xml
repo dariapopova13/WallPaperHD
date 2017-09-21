@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="categories">
+        <item>fashion</item>
+        <item>nature</item>
+        <item>backgrounds</item>
+        <item>science</item>
+        <item>education</item>
+        <item>people</item>
+        <item>feelings</item>
+        <item>religion</item>
+        <item>health</item>
+        <item>places</item>
+        <item>animals</item>
+        <item>industry</item>
+        <item>food</item>
+        <item>computer</item>
+        <item>sports</item>
+        <item>transportation</item>
+        <item>travel</item>
+        <item>buildings</item>
+        <item>business</item>
+        <item>music</item>
+    </string-array>
+
+    <array name="colors">
+        <item name="red_500" type="color">#e51c23</item>
+        <item name="pink_500" type="color">#e91e63</item>
+        <item name="purple_500" type="color">#9c27b0</item>
+        <item name="deep_purple_500" type="color">#673ab7</item>
+        <item name="indigo_500" type="color">#3f51b5</item>
+        <item name="blue_500" type="color">#5677fc</item>
+        <item name="light_blue_500" type="color">#03a9f4</item>
+        <item name="cyan_500" type="color">#00bcd4</item>
+        <item name="teal_500" type="color">#009688</item>
+        <item name="green_500" type="color">#259b24</item>
+        <item name="light_green_500" type="color">#8bc34a</item>
+        <item name="lime_500" type="color">#cddc39</item>
+        <item name="yellow_500" type="color">#ffeb3b</item>
+        <item name="orange_500" type="color">#ff9800</item>
+        <item name="deep_orange_500" type="color">#ff5722</item>
+    </array>
+
+    <string-array name="mock_new_images">
+        <item>http://hdwallpaper.info/wp-content/uploads/2016/10/nature-wallpap.jpg</item>
+        <item>https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg</item>
+        <item>https://images.pexels.com/photos/578853/pexels-photo-578853.jpeg</item>
+        <item>https://images.pexels.com/photos/87646/horsehead-nebula-dark-nebula-constellation-orion-87646.jpeg</item>
+        <item>https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg</item>
+        <item>https://images.pexels.com/photos/7653/pexels-photo.jpeg</item>
+        <item>https://images.pexels.com/photos/17679/pexels-photo.jpg</item>
+        <item>http://hdwallpaper.info/wp-content/uploads/2016/10/nature-wallpap.jpg</item>
+        <item>https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg</item>
+        <item>https://images.pexels.com/photos/578853/pexels-photo-578853.jpeg</item>
+        <item>https://images.pexels.com/photos/87646/horsehead-nebula-dark-nebula-constellation-orion-87646.jpeg</item>
+        <item>https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg</item>
+        <item>https://images.pexels.com/photos/7653/pexels-photo.jpeg</item>
+        <item>https://images.pexels.com/photos/17679/pexels-photo.jpg</item>
+        <item>http://hdwallpaper.info/wp-content/uploads/2016/10/nature-wallpap.jpg</item>
+        <item>https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg</item>
+        <item>https://images.pexels.com/photos/578853/pexels-photo-578853.jpeg</item>
+        <item>https://images.pexels.com/photos/87646/horsehead-nebula-dark-nebula-constellation-orion-87646.jpeg</item>
+        <item>https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg</item>
+        <item>https://images.pexels.com/photos/7653/pexels-photo.jpeg</item>
+        <item>https://images.pexels.com/photos/17679/pexels-photo.jpg</item>
+        <item>http://hdwallpaper.info/wp-content/uploads/2016/10/nature-wallpap.jpg</item>
+        <item>https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg</item>
+        <item>https://images.pexels.com/photos/578853/pexels-photo-578853.jpeg</item>
+        <item>https://images.pexels.com/photos/87646/horsehead-nebula-dark-nebula-constellation-orion-87646.jpeg</item>
+        <item>https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg</item>
+        <item>https://images.pexels.com/photos/7653/pexels-photo.jpeg</item>
+        <item>https://images.pexels.com/photos/17679/pexels-photo.jpg</item>
+        <item>http://hdwallpaper.info/wp-content/uploads/2016/10/nature-wallpap.jpg</item>
+        <item>https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg</item>
+        <item>https://images.pexels.com/photos/578853/pexels-photo-578853.jpeg</item>
+        <item>https://images.pexels.com/photos/87646/horsehead-nebula-dark-nebula-constellation-orion-87646.jpeg</item>
+        <item>https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg</item>
+        <item>https://images.pexels.com/photos/7653/pexels-photo.jpeg</item>
+        <item>https://images.pexels.com/photos/17679/pexels-photo.jpg</item>
+        <item>http://hdwallpaper.info/wp-content/uploads/2016/10/nature-wallpap.jpg</item>
+        <item>https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg</item>
+        <item>https://images.pexels.com/photos/578853/pexels-photo-578853.jpeg</item>
+        <item>https://images.pexels.com/photos/87646/horsehead-nebula-dark-nebula-constellation-orion-87646.jpeg</item>
+        <item>https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg</item>
+        <item>https://images.pexels.com/photos/7653/pexels-photo.jpeg</item>
+        <item>https://images.pexels.com/photos/17679/pexels-photo.jpg</item>
+    </string-array>
+
+
+</resources>

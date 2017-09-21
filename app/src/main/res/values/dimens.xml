@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="category_text_size">24sp</dimen>
+    <dimen name="category_row_height">150dp</dimen>
+    <dimen name="image_app_bar">300dp</dimen>
+    <dimen name="image_fab_margin">15dp</dimen>
+</resources>
