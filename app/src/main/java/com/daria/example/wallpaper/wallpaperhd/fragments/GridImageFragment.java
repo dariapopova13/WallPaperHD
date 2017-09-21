@@ -1,6 +1,5 @@
 package com.daria.example.wallpaper.wallpaperhd.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,8 +11,8 @@ import android.view.ViewGroup;
 
 import com.daria.example.wallpaper.wallpaperhd.R;
 import com.daria.example.wallpaper.wallpaperhd.adapters.GridImageAdapter;
+import com.daria.example.wallpaper.wallpaperhd.utilities.MockUtils;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,7 +32,8 @@ public class GridImageFragment extends Fragment {
 
         gridRecycleView = (RecyclerView) view.findViewById(R.id.grid_image_recycleview);
 
-        loadData(view.getContext());
+
+        mockImagesUrl = MockUtils.getMockUrl(view.getContext());
         gridImageAdapter = new GridImageAdapter(mockImagesUrl, view.getContext());
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(view.getContext(), 2);
@@ -44,7 +44,4 @@ public class GridImageFragment extends Fragment {
     }
 
 
-    private void loadData(Context mContext) {
-        mockImagesUrl = Arrays.asList(mContext.getResources().getStringArray(R.array.mock_new_images));
-    }
 }

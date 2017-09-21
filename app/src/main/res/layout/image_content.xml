@@ -5,57 +5,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/grey_gradient"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_image">
 
+
     <LinearLayout
-        android:orientation="vertical"
-        android:background="@drawable/grey_gradient"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_margin="15dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/grey_gradient"
+            android:padding="15dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/image_name"
-                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="abstract"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textSize="15sp"/>
 
             <TextView
+                android:id="@+id/image_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Some vary vary useful information"
-                android:id="@+id/image_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:text="Some vary vary useful information"/>
 
-           <android.support.v7.widget.RecyclerView
-               android:layout_marginTop="20dp"
-               android:id="@+id/image_tags_recycle_view"
-               android:layout_width="match_parent"
-               android:layout_height="20dp"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/image_tags_recycle_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"/>
 
             <TextView
-                android:layout_marginTop="30dp"
-                android:text="@string/similar_images"
-                android:id="@+id/image_info"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/similar_images"/>
+
         </LinearLayout>
 
-        <fragment
-            android:id="@+id/similar_images_fragment"
-            android:name="com.daria.example.wallpaper.wallpaperhd.fragments.GridImageFragment"
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/similar_images_recycle_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/fragment_grid_images"/>
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 

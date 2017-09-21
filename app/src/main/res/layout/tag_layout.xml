@@ -5,9 +5,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/image_tag"
+    android:textSize="14sp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:background="@drawable/oval_shape"
-    android:padding="5dp"
+    android:background="@drawable/oval_dark_shape"
+    android:padding="15dp"
     tools:text="test tag"/>

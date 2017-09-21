@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.daria.example.wallpaper.wallpaperhd.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,6 +32,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
         mockTags.add("birds");
         mockTags.add("girls");
         mockTags.add("cars");
+        Collections.sort(mockTags);
     }
 
     @Override

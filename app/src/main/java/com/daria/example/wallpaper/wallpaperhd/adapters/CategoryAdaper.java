@@ -19,6 +19,7 @@ import com.yayandroid.parallaxrecyclerview.ParallaxImageView;
 import com.yayandroid.parallaxrecyclerview.ParallaxViewHolder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,6 +36,7 @@ public class CategoryAdaper extends RecyclerView.Adapter<CategoryAdaper.Category
         this.mContext = mContext;
         categories = new ArrayList<>();
         String[] titles = mContext.getResources().getStringArray(R.array.categories);
+        Arrays.sort(titles);
         Category category;
         String[] mockImages = mContext.getResources().getStringArray(R.array.mock_new_images);
         for (int i = 0; i < titles.length; i++) {
@@ -61,15 +63,14 @@ public class CategoryAdaper extends RecyclerView.Adapter<CategoryAdaper.Category
         Category category = categories.get(position);
 
         holder.categoryTitle.setText(category.getTitle());
-        loadCategoryImage(holder.getBackgroundImage(),category.getImage());
-//        holder.getBackgroundImage().reuse();
+        loadCategoryImage(holder.categoryImage,category.getImage());
+        holder.getBackgroundImage().reuse();
     }
 
     private void loadCategoryImage(ImageView categoryImage, final String image) {
         if (!TextUtils.isEmpty(image)) {
             Glide.with(mContext).load(image)
                     .thumbnail(1f)
-                    .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(categoryImage);
         }
