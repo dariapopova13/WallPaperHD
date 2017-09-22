@@ -36,7 +36,7 @@ public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.Grid
     @Override
     public GridImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.single_grid_image, parent, false);
+                .inflate(R.layout.single_grid_image_instance, parent, false);
         view.setOnClickListener(this);
         return new GridImageViewHolder(view);
     }
@@ -52,7 +52,6 @@ public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.Grid
         if (!TextUtils.isEmpty(image)) {
             Glide.with(mContext).load(image)
                     .thumbnail(1f)
-                    .crossFade()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.newImage);
 

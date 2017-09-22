@@ -38,5 +38,5 @@
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/main_content"/>
+    <include layout="@layout/content_main"/>
 </android.support.design.widget.CoordinatorLayout>

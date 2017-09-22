@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="orientation">
+        <item>all</item>
+        <item>horizontal</item>
+        <item>vertical</item>
+    </string-array>
+
+    <string-array name="order">
+        <item>popular</item>
+        <item>latest</item>
+    </string-array>
+
     <string-array name="categories">
         <item>fashion</item>
         <item>nature</item>
@@ -50,40 +61,43 @@
         <item>https://images.pexels.com/photos/7653/pexels-photo.jpeg</item>
         <item>https://images.pexels.com/photos/17679/pexels-photo.jpg</item>
         <item>http://hdwallpaper.info/wp-content/uploads/2016/10/nature-wallpap.jpg</item>
-        <item>https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg</item>
-        <item>https://images.pexels.com/photos/578853/pexels-photo-578853.jpeg</item>
-        <item>https://images.pexels.com/photos/87646/horsehead-nebula-dark-nebula-constellation-orion-87646.jpeg</item>
-        <item>https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg</item>
-        <item>https://images.pexels.com/photos/7653/pexels-photo.jpeg</item>
-        <item>https://images.pexels.com/photos/17679/pexels-photo.jpg</item>
-        <item>http://hdwallpaper.info/wp-content/uploads/2016/10/nature-wallpap.jpg</item>
-        <item>https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg</item>
-        <item>https://images.pexels.com/photos/578853/pexels-photo-578853.jpeg</item>
-        <item>https://images.pexels.com/photos/87646/horsehead-nebula-dark-nebula-constellation-orion-87646.jpeg</item>
-        <item>https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg</item>
-        <item>https://images.pexels.com/photos/7653/pexels-photo.jpeg</item>
-        <item>https://images.pexels.com/photos/17679/pexels-photo.jpg</item>
-        <item>http://hdwallpaper.info/wp-content/uploads/2016/10/nature-wallpap.jpg</item>
-        <item>https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg</item>
-        <item>https://images.pexels.com/photos/578853/pexels-photo-578853.jpeg</item>
-        <item>https://images.pexels.com/photos/87646/horsehead-nebula-dark-nebula-constellation-orion-87646.jpeg</item>
-        <item>https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg</item>
-        <item>https://images.pexels.com/photos/7653/pexels-photo.jpeg</item>
-        <item>https://images.pexels.com/photos/17679/pexels-photo.jpg</item>
-        <item>http://hdwallpaper.info/wp-content/uploads/2016/10/nature-wallpap.jpg</item>
-        <item>https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg</item>
-        <item>https://images.pexels.com/photos/578853/pexels-photo-578853.jpeg</item>
-        <item>https://images.pexels.com/photos/87646/horsehead-nebula-dark-nebula-constellation-orion-87646.jpeg</item>
-        <item>https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg</item>
-        <item>https://images.pexels.com/photos/7653/pexels-photo.jpeg</item>
-        <item>https://images.pexels.com/photos/17679/pexels-photo.jpg</item>
-        <item>http://hdwallpaper.info/wp-content/uploads/2016/10/nature-wallpap.jpg</item>
-        <item>https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg</item>
-        <item>https://images.pexels.com/photos/578853/pexels-photo-578853.jpeg</item>
-        <item>https://images.pexels.com/photos/87646/horsehead-nebula-dark-nebula-constellation-orion-87646.jpeg</item>
-        <item>https://images.pexels.com/photos/36764/marguerite-daisy-beautiful-beauty.jpg</item>
-        <item>https://images.pexels.com/photos/7653/pexels-photo.jpeg</item>
-        <item>https://images.pexels.com/photos/17679/pexels-photo.jpg</item>
+        <item>http://pm1.narvii.com/5610/935b912ec6e1f98f9dc53136fa8b350641a82cf2_hq.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/241.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/389.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/13109.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/12581.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/13110.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/5487.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/12268.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/149.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/13443.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/13423.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/6265.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/850.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/13445.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/3518.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/475.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/1232.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/12607.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/1525.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/5085.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/386.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/5529.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/12582.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/545.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/12608.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/527.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/12582.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/169.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/547.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/241.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/173.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/15657.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/183.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/15656.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/15662.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/14681.jpg</item>
+        <item>https://wallpapershome.ru/images/pages/pic_hs/182.jpg</item>
     </string-array>
 
 

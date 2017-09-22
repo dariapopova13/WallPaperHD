@@ -7,6 +7,7 @@
     <color name="colorTextPrimary">#fff</color>
     <color name="color_tab_selection">#f0b34a</color>
     <color name="colorTab">#c0c0c0</color>
+    <color name="colorCheckFab">@android:color/holo_green_dark</color>
     <!--<color name="colorPrimary">#313131</color>-->
     <!--<color name="colorPrimaryDark">#212121</color>-->
     <!--<color name="colorAccent">#fff</color>-->

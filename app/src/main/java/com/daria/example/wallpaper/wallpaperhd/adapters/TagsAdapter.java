@@ -1,11 +1,9 @@
 package com.daria.example.wallpaper.wallpaperhd.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,11 +16,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.daria.example.wallpaper.wallpaperhd.R.layout.activity_image;
+
 /**
  * Created by Daria Popova on 21.09.17.
  */
 
-public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder> implements View.OnClickListener{
+public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder> implements View.OnClickListener {
 
     private List<String> mockTags;
     private Context mContext;
@@ -50,7 +50,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
     @Override
     public TagsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.tag_layout, parent, false);
+                .inflate(R.layout.single_tag_instance, parent, false);
         view.setOnClickListener(this);
         return new TagsViewHolder(view);
     }

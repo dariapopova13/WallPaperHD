@@ -53,7 +53,7 @@ public class CategoryAdaper extends RecyclerView.Adapter<CategoryAdaper.Category
     @Override
     public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.single_category_row, parent, false);
+                .inflate(R.layout.single_category_row_instance, parent, false);
         view.setOnClickListener(this);
         return new CategoryViewHolder(view);
     }

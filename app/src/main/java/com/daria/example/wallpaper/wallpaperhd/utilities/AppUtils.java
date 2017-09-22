@@ -9,7 +9,7 @@ import android.text.TextUtils;
  * Created by Daria Popova on 20.09.17.
  */
 
-public class AppUtils {
+public final class AppUtils {
 
     public static int getNewRandomColor(Context context, int previousColor) {
         int returnColor = Color.CYAN;
