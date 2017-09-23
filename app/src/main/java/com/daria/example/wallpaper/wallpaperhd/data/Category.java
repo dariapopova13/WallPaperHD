@@ -14,6 +14,9 @@ public class Category {
         this.title = title;
     }
 
+    public Category() {
+    }
+
     public String getImage() {
         return image;
     }

@@ -18,8 +18,6 @@ import com.daria.example.wallpaper.wallpaperhd.data.Category;
 import com.yayandroid.parallaxrecyclerview.ParallaxImageView;
 import com.yayandroid.parallaxrecyclerview.ParallaxViewHolder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,19 +29,6 @@ public class CategoryAdaper extends RecyclerView.Adapter<CategoryAdaper.Category
     private Context mContext;
     private List<Category> categories;
 
-
-    public CategoryAdaper(Context mContext) {
-        this.mContext = mContext;
-        categories = new ArrayList<>();
-        String[] titles = mContext.getResources().getStringArray(R.array.categories);
-        Arrays.sort(titles);
-        Category category;
-        String[] mockImages = mContext.getResources().getStringArray(R.array.mock_new_images);
-        for (int i = 0; i < titles.length; i++) {
-            category = new Category(mockImages[i], titles[i]);
-            categories.add(category);
-        }
-    }
 
     public CategoryAdaper(Context mContext, List<Category> categories) {
         this.mContext = mContext;
@@ -63,12 +48,12 @@ public class CategoryAdaper extends RecyclerView.Adapter<CategoryAdaper.Category
         Category category = categories.get(position);
 
         holder.categoryTitle.setText(category.getTitle());
-        loadCategoryImage(holder.categoryImage,category.getImage());
+        loadCategoryImage(holder.categoryImage, category.getImage());
         holder.getBackgroundImage().reuse();
     }
 
     private void loadCategoryImage(ImageView categoryImage, final String image) {
-        if (!TextUtils.isEmpty(image)) {
+        if (image != null && !TextUtils.isEmpty(image)) {
             Glide.with(mContext).load(image)
                     .thumbnail(1f)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
@@ -96,7 +81,7 @@ public class CategoryAdaper extends RecyclerView.Adapter<CategoryAdaper.Category
         mContext.startActivity(intent);
     }
 
-    public class CategoryViewHolder extends ParallaxViewHolder{
+    public class CategoryViewHolder extends ParallaxViewHolder {
 
         private ParallaxImageView categoryImage;
         private TextView categoryTitle;

@@ -1,6 +1,7 @@
 package com.daria.example.wallpaper.wallpaperhd.activities;
 
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -14,9 +15,12 @@ import android.widget.Toast;
 
 import com.daria.example.wallpaper.wallpaperhd.R;
 import com.daria.example.wallpaper.wallpaperhd.adapters.ViewPagerAdaper;
+import com.daria.example.wallpaper.wallpaperhd.data.enums.ImageTypeEnum;
+import com.daria.example.wallpaper.wallpaperhd.data.enums.OrderEnum;
 import com.daria.example.wallpaper.wallpaperhd.fragments.CategoryFragment;
 import com.daria.example.wallpaper.wallpaperhd.fragments.GridImageFragment;
 import com.daria.example.wallpaper.wallpaperhd.utilities.AppUtils;
+import com.daria.example.wallpaper.wallpaperhd.utilities.UrlUtils;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
@@ -30,6 +34,34 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
 
+        createAppBar();
+        createViewPager();
+    }
+
+    private void createViewPager() {
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        tabLayout.setupWithViewPager(viewPager);
+        viewPager.addOnPageChangeListener(this);
+
+        ViewPagerAdaper adaper = new ViewPagerAdaper(getSupportFragmentManager());
+        adaper.addFragment(new CategoryFragment(), getString(R.string.category_title));
+        adaper.addFragment(new GridImageFragment(createUri(OrderEnum.LATEST)), getString(R.string.new_images_title));
+        adaper.addFragment(new GridImageFragment(createUri(OrderEnum.POPULAR)), getString(R.string.top_title));
+
+        viewPager.setAdapter(adaper);
+        applyCustomTabView(adaper);
+    }
+
+    private String createUri(OrderEnum order) {
+        Uri uri = new UrlUtils.Builder()
+                .addOrder(order)
+                .addImageType(ImageTypeEnum.PHOTO)
+                .addPerPage(20)
+                .create(this).getURI();
+        return uri.toString();
+    }
+
+    private void createAppBar() {
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -45,11 +77,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         Typeface titleFont = Typeface.createFromAsset(getAssets(), "fonts/Architects Daughter.ttf");
         title.setTypeface(titleFont);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-
-        tabLayout.setupWithViewPager(viewPager);
-        viewPager.addOnPageChangeListener(this);
-        setUpViewPager(viewPager);
     }
 
     @Override
@@ -73,17 +100,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
     }
 
-    private void setUpViewPager(ViewPager viewPager) {
-        ViewPagerAdaper adaper = new ViewPagerAdaper(getSupportFragmentManager());
-        adaper.addFragment(new CategoryFragment(), getString(R.string.category_title));
-        adaper.addFragment(new GridImageFragment(), getString(R.string.new_images_title));
-        adaper.addFragment(new GridImageFragment(), getString(R.string.top_title));
-
-
-        viewPager.setAdapter(adaper);
-        applyCustomTabView(adaper);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -104,6 +120,5 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void onPageScrollStateChanged(int state) {
 
     }
-
 
 }

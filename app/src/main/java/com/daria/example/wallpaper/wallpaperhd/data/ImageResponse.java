@@ -1,16 +1,18 @@
 package com.daria.example.wallpaper.wallpaperhd.data;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
  * Created by Daria Popova on 22.09.17.
  */
-
-public class Response {
+public class ImageResponse {
 
     private int total;
     private int totalHits;
-    private List<Hit> hits;
+    @SerializedName("hits")
+    private List<Image> images;
 
     public int getTotal() {
         return total;
@@ -20,6 +22,7 @@ public class Response {
         this.total = total;
     }
 
+
     public int getTotalHits() {
         return totalHits;
     }
@@ -28,11 +31,11 @@ public class Response {
         this.totalHits = totalHits;
     }
 
-    public List<Hit> getHits() {
-        return hits;
+    public List<Image> getImages() {
+        return images;
     }
 
-    public void setHits(List<Hit> hits) {
-        this.hits = hits;
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 }

@@ -1,17 +1,16 @@
 package com.daria.example.wallpaper.wallpaperhd.data;
 
-import java.util.List;
-
 /**
  * Created by Daria Popova on 22.09.17.
  */
 
-public class Hit {
+
+public class Image {
 
     private long id;
     private String pageURL;
     private String type;
-    private List<String> tags;
+    private String tags;
     private String previewURL;
     private int previewWidth;
     private int previewHeigh;
@@ -25,7 +24,10 @@ public class Hit {
     private int downloads;
     private int favorites;
     private int likes;
-    private int user;
+    private String user;
+
+    public Image() {
+    }
 
     public long getId() {
         return id;
@@ -51,11 +53,11 @@ public class Hit {
         this.type = type;
     }
 
-    public List<String> getTags() {
+    public String getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(String tags) {
         this.tags = tags;
     }
 
@@ -163,11 +165,12 @@ public class Hit {
         this.likes = likes;
     }
 
-    public int getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(int user) {
+    public void setUser(String user) {
         this.user = user;
     }
+
 }

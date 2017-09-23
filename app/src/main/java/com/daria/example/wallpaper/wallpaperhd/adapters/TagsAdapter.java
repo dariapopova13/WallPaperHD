@@ -10,13 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daria.example.wallpaper.wallpaperhd.R;
+import com.daria.example.wallpaper.wallpaperhd.utilities.AppUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
-import static com.daria.example.wallpaper.wallpaperhd.R.layout.activity_image;
 
 /**
  * Created by Daria Popova on 21.09.17.
@@ -24,27 +20,12 @@ import static com.daria.example.wallpaper.wallpaperhd.R.layout.activity_image;
 
 public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder> implements View.OnClickListener {
 
-    private List<String> mockTags;
+    private List<String> tags;
     private Context mContext;
 
-    public TagsAdapter(Context mContext) {
+    public TagsAdapter(Context mContext, String tag) {
         this.mContext = mContext;
-        mockTags = new ArrayList<>();
-        mockTags.add("game of thrones");
-        mockTags.add("vikings");
-        mockTags.add("new");
-        mockTags.add("fashion");
-        mockTags.add("birds");
-        mockTags.add("girls");
-        mockTags.add("cars");
-        Collections.sort(mockTags, new Comparator<String>() {
-            @Override
-            public int compare(String s, String s1) {
-                if (s == null || s.length() < 1 || s1 == null || s1.length() < 1)
-                    return 0;
-                else return Character.compare(s.charAt(0), s1.charAt(0));
-            }
-        });
+        tags = AppUtils.seperateTags(tag);
     }
 
     @Override
@@ -57,12 +38,12 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
 
     @Override
     public void onBindViewHolder(TagsViewHolder holder, int position) {
-        holder.tag.setText(mockTags.get(position));
+        holder.tag.setText(tags.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mockTags.size();
+        return tags.size();
     }
 
     @Override

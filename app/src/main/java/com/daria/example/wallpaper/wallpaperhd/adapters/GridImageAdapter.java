@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.daria.example.wallpaper.wallpaperhd.R;
 import com.daria.example.wallpaper.wallpaperhd.activities.ImageActivity;
+import com.daria.example.wallpaper.wallpaperhd.data.Image;
 
 import java.util.List;
 
@@ -24,12 +25,12 @@ import java.util.List;
 public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.GridImageViewHolder>
         implements View.OnClickListener {
 
-    private List<String> mockImagesUrl;
+    public static List<Image> images;
     private Context mContext;
 
 
-    public GridImageAdapter(List<String> imageUrl, Context mContext) {
-        this.mockImagesUrl = imageUrl;
+    public GridImageAdapter(List<Image> images, Context mContext) {
+        this.images = images;
         this.mContext = mContext;
     }
 
@@ -43,24 +44,24 @@ public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.Grid
 
     @Override
     public void onBindViewHolder(GridImageViewHolder holder, int position) {
-        if (mockImagesUrl.get(position) == null) return;
-        holder.imageUrl.setText(mockImagesUrl.get(position));
-        loadPicture(holder, mockImagesUrl.get(position));
+        if (images.get(position) == null) return;
+        Image image = images.get(position);
+        holder.imageUrl.setText(image.getWebformatURL());
+        loadPicture(holder, image.getWebformatURL());
     }
 
     private void loadPicture(final GridImageViewHolder holder, String image) {
-        if (!TextUtils.isEmpty(image)) {
+        if (image != null && !TextUtils.isEmpty(image)) {
             Glide.with(mContext).load(image)
                     .thumbnail(1f)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.newImage);
-
         }
     }
 
     @Override
     public int getItemCount() {
-        return mockImagesUrl.size();
+        return images.size();
     }
 
     @Override
@@ -69,6 +70,7 @@ public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.Grid
         if (image == null || TextUtils.isEmpty(image.getText().toString())) return;
         Intent intent = new Intent(mContext, ImageActivity.class);
         intent.putExtra("image", image.getText().toString());
+//        intent.putParcelableArrayListExtra("images", images);
         mContext.startActivity(intent);
     }
 
@@ -83,6 +85,4 @@ public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.Grid
             imageUrl = (TextView) view.findViewById(R.id.image_grid_url);
         }
     }
-
-
 }

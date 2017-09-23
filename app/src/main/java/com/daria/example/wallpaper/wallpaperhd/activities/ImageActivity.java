@@ -1,20 +1,30 @@
 package com.daria.example.wallpaper.wallpaperhd.activities;
 
 
+import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.daria.example.wallpaper.wallpaperhd.R;
-import com.daria.example.wallpaper.wallpaperhd.adapters.ImageStatePagerAdapter;
+import com.daria.example.wallpaper.wallpaperhd.adapters.GridImageAdapter;
+import com.daria.example.wallpaper.wallpaperhd.data.Image;
+import com.daria.example.wallpaper.wallpaperhd.fragments.GridImageFragment;
+import com.daria.example.wallpaper.wallpaperhd.fragments.ImageFragment;
 import com.daria.example.wallpaper.wallpaperhd.utilities.MockUtils;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.daria.example.wallpaper.wallpaperhd.R.drawable.ic_arrow_back_white_24dp;
@@ -23,25 +33,37 @@ public class ImageActivity extends AppCompatActivity implements ViewPager.OnPage
 
     private Toolbar toolbar;
     private ViewPager viewPager;
-    public static List<String> mockUrl;
+    private List<Image> images;
     private ImageStatePagerAdapter adapter;
     private Menu menu;
+    private String currentImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
-        mockUrl = MockUtils.getMockUrl(this);
+
+        currentImageUrl = getIntent().getStringExtra("image");
+        if (currentImageUrl == null || TextUtils.isEmpty(currentImageUrl))
+            finish();
+
+
         createToolbar();
         initViewPager();
     }
 
     private void initViewPager() {
         viewPager = (ViewPager) findViewById(R.id.images_view_pager);
-        adapter = new ImageStatePagerAdapter(getSupportFragmentManager(), mockUrl.size(), this);
+        adapter = new ImageStatePagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(adapter);
-        onPageScrollStateChanged(0);
         viewPager.addOnPageChangeListener(this);
+
+        List<String> imagesUrl = new ArrayList<>();
+        for (Image image : images) {
+            imagesUrl.add(image.getWebformatURL());
+        }
+        int current = imagesUrl.indexOf(currentImageUrl);
+        viewPager.setCurrentItem(current);
     }
 
 
@@ -102,17 +124,39 @@ public class ImageActivity extends AppCompatActivity implements ViewPager.OnPage
     public void onPageSelected(int position) {
         if (menu == null)
             return;
-        String image = mockUrl.get(position);
-        if (MockUtils.isFavourite(image)) {
-            MenuItem item = menu.findItem(R.id.favourite);
-            if (item != null) {
-                item.setIcon(getDrawable(R.drawable.ic_star_white_24dp));
-            }
-        }
+        Image image = images.get(position);
+//        if (MockUtils.isFavourite(image)) {
+//            MenuItem item = menu.findItem(R.id.favourite);
+//            if (item != null) {
+//                item.setIcon(getDrawable(R.drawable.ic_star_white_24dp));
+//            }
+//        }
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    public class ImageStatePagerAdapter extends FragmentStatePagerAdapter {
+
+        public int NUM_ITEMS;
+        private Context mContext;
+
+        public ImageStatePagerAdapter(FragmentManager fm, Context mContext) {
+            super(fm);
+            this.mContext = mContext;
+            NUM_ITEMS = images.size();
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return ImageFragment.newInstance(position, mContext, images.get(position));
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
     }
 }

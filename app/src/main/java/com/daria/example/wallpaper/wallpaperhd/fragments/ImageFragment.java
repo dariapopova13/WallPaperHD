@@ -1,6 +1,7 @@
 package com.daria.example.wallpaper.wallpaperhd.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,11 +20,24 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.daria.example.wallpaper.wallpaperhd.R;
-import com.daria.example.wallpaper.wallpaperhd.activities.ImageActivity;
+import com.daria.example.wallpaper.wallpaperhd.activities.FullImageActivity;
 import com.daria.example.wallpaper.wallpaperhd.adapters.GridImageAdapter;
 import com.daria.example.wallpaper.wallpaperhd.adapters.TagsAdapter;
+import com.daria.example.wallpaper.wallpaperhd.data.Image;
+import com.daria.example.wallpaper.wallpaperhd.data.ImageResponse;
+import com.daria.example.wallpaper.wallpaperhd.data.enums.ImageTypeEnum;
+import com.daria.example.wallpaper.wallpaperhd.data.enums.OrderEnum;
+import com.daria.example.wallpaper.wallpaperhd.network.ApiClient;
+import com.daria.example.wallpaper.wallpaperhd.network.ApiInterface;
 import com.daria.example.wallpaper.wallpaperhd.utilities.AppUtils;
-import com.daria.example.wallpaper.wallpaperhd.utilities.MockUtils;
+import com.daria.example.wallpaper.wallpaperhd.utilities.UrlUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Daria Popova on 22.09.17.
@@ -31,26 +45,26 @@ import com.daria.example.wallpaper.wallpaperhd.utilities.MockUtils;
 @SuppressWarnings("all")
 public class ImageFragment extends Fragment implements View.OnClickListener {
 
-    public final String imageUrl;
+    private Image image;
     private ImageView imageView;
     private RecyclerView tagsRecycleView;
     private TagsAdapter tagsAdapter;
     private RecyclerView similarImagesRecycleView;
+    private GridImageAdapter similarImagesAdapter;
     private GridImageAdapter gridImageAdapter;
     private Context mContext;
     private FloatingActionButton fab;
     private int num;
 
-    public ImageFragment(String imageUrl, Context mContext) {
+    public ImageFragment(Image image, Context mContext) {
         this.mContext = mContext;
-        this.imageUrl = imageUrl;
+        this.image = image;
     }
 
-    public static ImageFragment newInstance(int num, Context mContext) {
+    public static ImageFragment newInstance(int num, Context mContext, Image image) {
         Bundle args = new Bundle();
         args.putInt("num", num);
-        args.putString("image", ImageActivity.mockUrl.get(num));
-        ImageFragment fragment = new ImageFragment(ImageActivity.mockUrl.get(num), mContext);
+        ImageFragment fragment = new ImageFragment(image, mContext);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,6 +80,12 @@ public class ImageFragment extends Fragment implements View.OnClickListener {
                 } else if (current.equals(mContext.getDrawable(R.drawable.ic_get_app_white_24dp).getConstantState())) {
                     applyImage();
                 }
+                break;
+            }
+            case R.id.single_image: {
+                Intent fullImageIntent = new Intent(getContext(), FullImageActivity.class);
+                fullImageIntent.putExtra("image", image.getWebformatURL());
+                startActivity(fullImageIntent);
             }
         }
     }
@@ -104,19 +124,20 @@ public class ImageFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getFabCurrentState() {
-        if (MockUtils.isDownloaded(imageUrl))
-            fab.setImageDrawable(mContext.getDrawable(R.drawable.ic_get_app_white_24dp));
+//        if (MockUtils.isDownloaded(imageUrl))
+//            fab.setImageDrawable(mContext.getDrawable(R.drawable.ic_get_app_white_24dp));
     }
 
     private void initViews(View view) {
         tagsRecycleView = (RecyclerView) view.findViewById(R.id.image_tags_recycle_view);
         similarImagesRecycleView = (RecyclerView) view.findViewById(R.id.similar_images_recycle_view);
         imageView = (ImageView) view.findViewById(R.id.single_image);
+        imageView.setOnClickListener(this);
         fab = (FloatingActionButton) view.findViewById(R.id.image_save_fab);
     }
 
     private void createRecycleView() {
-        tagsAdapter = new TagsAdapter(mContext);
+        tagsAdapter = new TagsAdapter(mContext, image.getTags());
         RecyclerView.LayoutManager tagLayoutManager = new LinearLayoutManager(mContext,
                 LinearLayoutManager.HORIZONTAL, false);
 
@@ -124,18 +145,51 @@ public class ImageFragment extends Fragment implements View.OnClickListener {
         tagsRecycleView.setLayoutManager(tagLayoutManager);
 
         RecyclerView.LayoutManager similarImagesLayoutManager = new GridLayoutManager(mContext, 2);
-        gridImageAdapter = new GridImageAdapter(MockUtils.getMockUrl(mContext), mContext);
+
         similarImagesRecycleView.setLayoutManager(similarImagesLayoutManager);
-        similarImagesRecycleView.setAdapter(gridImageAdapter);
         similarImagesRecycleView.setNestedScrollingEnabled(false);
+        loadSimilarImages();
     }
 
     private void loadImage() {
-        if (imageUrl == null || TextUtils.isEmpty(imageUrl)) return;
-        Glide.with(this).load(imageUrl)
+        if (image.getWebformatURL() == null || TextUtils.isEmpty(image.getWebformatURL())) return;
+        Glide.with(this).load(image.getWebformatURL())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .thumbnail(1f)
-                .centerCrop()
                 .into(imageView);
+    }
+
+    private void loadSimilarImages() {
+
+        String uri = new UrlUtils.Builder()
+                .addImageType(ImageTypeEnum.PHOTO)
+                .addQuery(AppUtils.createQuery(image.getTags()))
+                .addPerPage(20)
+                .addOrder(OrderEnum.POPULAR)
+                .create(mContext).getURI().toString();
+
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<ImageResponse> call = apiService.getImages(uri);
+        call.enqueue(new Callback<ImageResponse>() {
+
+            @Override
+            public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
+                if (response == null || response.body() == null || response.body().getImages() == null)
+                    return;
+                List<Image> similarImages = new ArrayList<>();
+                for (Image image : response.body().getImages()) {
+                    similarImages.add(image);
+                }
+                if (similarImagesAdapter == null) {
+                    similarImagesAdapter = new GridImageAdapter(similarImages, mContext);
+                    similarImagesRecycleView.setAdapter(similarImagesAdapter);
+                } else similarImagesAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<ImageResponse> call, Throwable t) {
+
+            }
+        });
     }
 }
