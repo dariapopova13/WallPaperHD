@@ -2,8 +2,11 @@ package com.daria.example.wallpaper.wallpaperhd.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -16,12 +19,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.daria.example.wallpaper.wallpaperhd.R;
 import com.daria.example.wallpaper.wallpaperhd.activities.FullImageActivity;
-import com.daria.example.wallpaper.wallpaperhd.adapters.GridImageAdapter;
+import com.daria.example.wallpaper.wallpaperhd.adapters.GridImagesAdapter;
 import com.daria.example.wallpaper.wallpaperhd.adapters.TagsAdapter;
 import com.daria.example.wallpaper.wallpaperhd.data.Image;
 import com.daria.example.wallpaper.wallpaperhd.data.ImageResponse;
@@ -32,8 +36,12 @@ import com.daria.example.wallpaper.wallpaperhd.network.ApiInterface;
 import com.daria.example.wallpaper.wallpaperhd.utilities.AppUtils;
 import com.daria.example.wallpaper.wallpaperhd.utilities.UrlUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,28 +51,33 @@ import retrofit2.Response;
  * Created by Daria Popova on 22.09.17.
  */
 @SuppressWarnings("all")
-public class ImageFragment extends Fragment implements View.OnClickListener {
+public class SingleImageFragment extends Fragment implements View.OnClickListener {
 
     private Image image;
     private ImageView imageView;
     private RecyclerView tagsRecycleView;
     private TagsAdapter tagsAdapter;
     private RecyclerView similarImagesRecycleView;
-    private GridImageAdapter similarImagesAdapter;
-    private GridImageAdapter gridImageAdapter;
+    private GridImagesAdapter similarImagesAdapter;
+    private GridImagesAdapter gridImageAdapter;
     private Context mContext;
     private FloatingActionButton fab;
     private int num;
+    private TextView favCountTextView;
+    private TextView likesCountTextView;
+    private TextView downloadsCountTextView;
+    private TextView loadedByTextView;
 
-    public ImageFragment(Image image, Context mContext) {
+
+    public SingleImageFragment(Image image, Context mContext) {
         this.mContext = mContext;
         this.image = image;
     }
 
-    public static ImageFragment newInstance(int num, Context mContext, Image image) {
+    public static SingleImageFragment newInstance(int num, Context mContext, Image image) {
         Bundle args = new Bundle();
         args.putInt("num", num);
-        ImageFragment fragment = new ImageFragment(image, mContext);
+        SingleImageFragment fragment = new SingleImageFragment(image, mContext);
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,7 +91,7 @@ public class ImageFragment extends Fragment implements View.OnClickListener {
                 if (current.equals(mContext.getDrawable(R.drawable.ic_arrow_downward_white_24dp).getConstantState())) {
                     saveImage();
                 } else if (current.equals(mContext.getDrawable(R.drawable.ic_get_app_white_24dp).getConstantState())) {
-                    applyImage();
+                    applyImageAsBackground();
                 }
                 break;
             }
@@ -90,13 +103,75 @@ public class ImageFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void applyImage() {
+    private void applyImageAsBackground() {
         fab.setImageDrawable(mContext.getDrawable(R.drawable.ic_check_white_24dp));
         fab.setBackgroundTintList(ContextCompat.getColorStateList(mContext, R.color.colorCheckFab));
     }
 
     private void saveImage() {
-        fab.setImageDrawable(mContext.getDrawable(R.drawable.ic_get_app_white_24dp));
+        new SaveImageAsyncTask().execute();
+    }
+
+
+    private class SaveImageAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private FileOutputStream out;
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            fab.setImageDrawable(mContext.getDrawable(R.drawable.ic_get_app_white_24dp));
+        }
+
+        private boolean createImageFile() {
+            File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                    AppUtils.DIRECTORY_NAME);
+
+            boolean isCreated = false;
+
+            try {
+                if (!dir.exists())
+                    dir.mkdir();
+                File imageFile = new File(dir, AppUtils.createImageFileName(image));
+                if (!imageFile.exists())
+                    isCreated = imageFile.createNewFile();
+                if (isCreated)
+                    out = new FileOutputStream(imageFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return isCreated;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (!createImageFile()) return null;
+            try {
+                Bitmap saveImage = Glide.with(mContext).load(image.getWebformatURL())
+                        .asBitmap()
+                        .into(-1, -1)
+                        .get();
+                saveImage.compress(Bitmap.CompressFormat.PNG, 100, out);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } finally {
+                closeStream(out);
+            }
+
+            return null;
+        }
+
+        private void closeStream(FileOutputStream out) {
+            try {
+                if (out != null)
+                    out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -109,13 +184,23 @@ public class ImageFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_image, container, false);
+        View view = inflater.inflate(R.layout.fragment_single_image, container, false);
         view.setBackgroundColor(AppUtils.getRandomColorId(mContext));
+
         initViews(view);
         createRecycleView();
         loadImage();
         createFabCircle();
+        setImageInfo();
         return view;
+    }
+
+    private void setImageInfo() {
+        favCountTextView.setText(String.valueOf(image.getFavorites()));
+        likesCountTextView.setText(String.valueOf(image.getLikes()));
+        downloadsCountTextView.setText(String.valueOf(image.getDownloads()));
+
+        loadedByTextView.setText(loadedByTextView.getText() + " " + image.getUser());
     }
 
     private void createFabCircle() {
@@ -134,6 +219,10 @@ public class ImageFragment extends Fragment implements View.OnClickListener {
         imageView = (ImageView) view.findViewById(R.id.single_image);
         imageView.setOnClickListener(this);
         fab = (FloatingActionButton) view.findViewById(R.id.image_save_fab);
+        favCountTextView = (TextView) view.findViewById(R.id.fav_count);
+        downloadsCountTextView = (TextView) view.findViewById(R.id.downloaded_count);
+        likesCountTextView = (TextView) view.findViewById(R.id.likes_count);
+        loadedByTextView = (TextView) view.findViewById(R.id.loaded_by);
     }
 
     private void createRecycleView() {
@@ -181,7 +270,7 @@ public class ImageFragment extends Fragment implements View.OnClickListener {
                     similarImages.add(image);
                 }
                 if (similarImagesAdapter == null) {
-                    similarImagesAdapter = new GridImageAdapter(similarImages, mContext);
+                    similarImagesAdapter = new GridImagesAdapter(similarImages, mContext);
                     similarImagesRecycleView.setAdapter(similarImagesAdapter);
                 } else similarImagesAdapter.notifyDataSetChanged();
             }

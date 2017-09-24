@@ -30,7 +30,7 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="6dp"
+            app:elevation="6dp"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/color_tab_selection"
             app:tabIndicatorHeight="4dp"

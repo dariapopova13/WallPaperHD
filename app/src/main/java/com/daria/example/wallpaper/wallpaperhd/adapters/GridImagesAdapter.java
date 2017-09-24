@@ -13,23 +13,25 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.daria.example.wallpaper.wallpaperhd.R;
-import com.daria.example.wallpaper.wallpaperhd.activities.ImageActivity;
+import com.daria.example.wallpaper.wallpaperhd.activities.SingleImageActivity;
 import com.daria.example.wallpaper.wallpaperhd.data.Image;
+import com.daria.example.wallpaper.wallpaperhd.utilities.AppUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Daria Popova on 20.09.17.
  */
 
-public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.GridImageViewHolder>
+public class GridImagesAdapter extends RecyclerView.Adapter<GridImagesAdapter.GridImageViewHolder>
         implements View.OnClickListener {
 
-    public static List<Image> images;
+    private List<Image> images;
     private Context mContext;
 
 
-    public GridImageAdapter(List<Image> images, Context mContext) {
+    public GridImagesAdapter(List<Image> images, Context mContext) {
         this.images = images;
         this.mContext = mContext;
     }
@@ -52,7 +54,11 @@ public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.Grid
 
     private void loadPicture(final GridImageViewHolder holder, String image) {
         if (image != null && !TextUtils.isEmpty(image)) {
-            Glide.with(mContext).load(image)
+            Glide.with(mContext).load(AppUtils.getSmallImage(image))
+                    .centerCrop()
+                    .crossFade()
+//                    .asBitmap()
+//                    .toBytes(Bitmap.CompressFormat.JPEG,100)
                     .thumbnail(1f)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.newImage);
@@ -68,9 +74,9 @@ public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.Grid
     public void onClick(View view) {
         TextView image = view.findViewById(R.id.image_grid_url);
         if (image == null || TextUtils.isEmpty(image.getText().toString())) return;
-        Intent intent = new Intent(mContext, ImageActivity.class);
+        Intent intent = new Intent(mContext, SingleImageActivity.class);
         intent.putExtra("image", image.getText().toString());
-//        intent.putParcelableArrayListExtra("images", images);
+        intent.putParcelableArrayListExtra("images", (ArrayList) images);
         mContext.startActivity(intent);
     }
 

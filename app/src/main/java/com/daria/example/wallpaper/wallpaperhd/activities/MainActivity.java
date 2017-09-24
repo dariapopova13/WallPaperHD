@@ -17,8 +17,8 @@ import com.daria.example.wallpaper.wallpaperhd.R;
 import com.daria.example.wallpaper.wallpaperhd.adapters.ViewPagerAdaper;
 import com.daria.example.wallpaper.wallpaperhd.data.enums.ImageTypeEnum;
 import com.daria.example.wallpaper.wallpaperhd.data.enums.OrderEnum;
-import com.daria.example.wallpaper.wallpaperhd.fragments.CategoryFragment;
-import com.daria.example.wallpaper.wallpaperhd.fragments.GridImageFragment;
+import com.daria.example.wallpaper.wallpaperhd.fragments.CategoriesListFragment;
+import com.daria.example.wallpaper.wallpaperhd.fragments.GridImagesFragment;
 import com.daria.example.wallpaper.wallpaperhd.utilities.AppUtils;
 import com.daria.example.wallpaper.wallpaperhd.utilities.UrlUtils;
 
@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppUtils.verifyStoragePermissions(this);
+
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
@@ -39,14 +41,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     private void createViewPager() {
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.main_view_pager);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(this);
 
         ViewPagerAdaper adaper = new ViewPagerAdaper(getSupportFragmentManager());
-        adaper.addFragment(new CategoryFragment(), getString(R.string.category_title));
-        adaper.addFragment(new GridImageFragment(createUri(OrderEnum.LATEST)), getString(R.string.new_images_title));
-        adaper.addFragment(new GridImageFragment(createUri(OrderEnum.POPULAR)), getString(R.string.top_title));
+        adaper.addFragment(new CategoriesListFragment(), getString(R.string.category_title));
+        adaper.addFragment(new GridImagesFragment(createUri(OrderEnum.LATEST)), getString(R.string.new_images_title));
+        adaper.addFragment(new GridImagesFragment(createUri(OrderEnum.POPULAR)), getString(R.string.top_title));
+
 
         viewPager.setAdapter(adaper);
         applyCustomTabView(adaper);

@@ -1,6 +1,9 @@
 package com.daria.example.wallpaper.wallpaperhd.activities;
 
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +15,7 @@ import com.daria.example.wallpaper.wallpaperhd.R;
 import com.daria.example.wallpaper.wallpaperhd.data.Image;
 import com.daria.example.wallpaper.wallpaperhd.data.enums.ImageTypeEnum;
 import com.daria.example.wallpaper.wallpaperhd.data.enums.OrderEnum;
-import com.daria.example.wallpaper.wallpaperhd.fragments.GridImageFragment;
+import com.daria.example.wallpaper.wallpaperhd.fragments.GridImagesFragment;
 import com.daria.example.wallpaper.wallpaperhd.utilities.AppUtils;
 import com.daria.example.wallpaper.wallpaperhd.utilities.UrlUtils;
 
@@ -23,12 +26,13 @@ public class CategoryActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Fragment gridFragment;
     private String title;
-    public static List<Image> images;
+    private List<Image> images;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
+
         title = getIntent().getStringExtra("title");
         if (title == null || TextUtils.isEmpty(title))
             finish();
@@ -36,6 +40,7 @@ public class CategoryActivity extends AppCompatActivity {
         createToolbar();
         createGridFragment();
     }
+
 
     private void createGridFragment() {
         String uri = new UrlUtils.Builder()
@@ -45,7 +50,7 @@ public class CategoryActivity extends AppCompatActivity {
                 .addImageType(ImageTypeEnum.PHOTO)
                 .create(this).getURI().toString();
 
-        gridFragment = new GridImageFragment(uri);
+        gridFragment = new GridImagesFragment(uri);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.single_category_images_fragment, gridFragment)
                 .commit();

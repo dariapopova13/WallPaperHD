@@ -1,8 +1,12 @@
 package com.daria.example.wallpaper.wallpaperhd.activities;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -16,20 +20,16 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.daria.example.wallpaper.wallpaperhd.R;
-import com.daria.example.wallpaper.wallpaperhd.adapters.GridImageAdapter;
 import com.daria.example.wallpaper.wallpaperhd.data.Image;
-import com.daria.example.wallpaper.wallpaperhd.fragments.GridImageFragment;
-import com.daria.example.wallpaper.wallpaperhd.fragments.ImageFragment;
-import com.daria.example.wallpaper.wallpaperhd.utilities.MockUtils;
-
-import org.w3c.dom.Text;
+import com.daria.example.wallpaper.wallpaperhd.fragments.SingleImageFragment;
+import com.daria.example.wallpaper.wallpaperhd.utilities.AppUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.daria.example.wallpaper.wallpaperhd.R.drawable.ic_arrow_back_white_24dp;
 
-public class ImageActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class SingleImageActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     private Toolbar toolbar;
     private ViewPager viewPager;
@@ -38,18 +38,26 @@ public class ImageActivity extends AppCompatActivity implements ViewPager.OnPage
     private Menu menu;
     private String currentImageUrl;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
 
+
+        getExtras();
+        createToolbar();
+        initViewPager();
+    }
+
+    private void getExtras() {
         currentImageUrl = getIntent().getStringExtra("image");
         if (currentImageUrl == null || TextUtils.isEmpty(currentImageUrl))
             finish();
 
-
-        createToolbar();
-        initViewPager();
+        images = getIntent().getParcelableArrayListExtra("images");
+        if (images == null)
+            finish();
     }
 
     private void initViewPager() {
@@ -63,6 +71,8 @@ public class ImageActivity extends AppCompatActivity implements ViewPager.OnPage
             imagesUrl.add(image.getWebformatURL());
         }
         int current = imagesUrl.indexOf(currentImageUrl);
+        if (current == -1)
+            finish();
         viewPager.setCurrentItem(current);
     }
 
@@ -114,7 +124,6 @@ public class ImageActivity extends AppCompatActivity implements ViewPager.OnPage
         }
     }
 
-
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -151,7 +160,7 @@ public class ImageActivity extends AppCompatActivity implements ViewPager.OnPage
 
         @Override
         public Fragment getItem(int position) {
-            return ImageFragment.newInstance(position, mContext, images.get(position));
+            return SingleImageFragment.newInstance(position, mContext, images.get(position));
         }
 
         @Override

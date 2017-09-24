@@ -34,7 +34,7 @@ import retrofit2.Response;
  * Created by Daria Popova on 19.09.17.
  */
 
-public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class CategoriesListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView categoryRecycleView;
     private CategoryAdaper categoryAdaper;
@@ -46,10 +46,10 @@ public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_categories, container, false);
+        View view = inflater.inflate(R.layout.fragment_categories_list, container, false);
 
         categoryRecycleView = (RecyclerView) view.findViewById(R.id.category_recycleview);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.categories_swipe_refresh);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.categories_list_swipe_refresh);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         categoryRecycleView.setLayoutManager(layoutManager);
         apiService = ApiClient.getClient().create(ApiInterface.class);

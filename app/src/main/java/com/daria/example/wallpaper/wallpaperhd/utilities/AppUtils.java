@@ -1,12 +1,21 @@
 package com.daria.example.wallpaper.wallpaperhd.utilities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.WindowManager;
+
+import com.daria.example.wallpaper.wallpaperhd.data.Image;
+import com.daria.example.wallpaper.wallpaperhd.data.enums.FormatEnum;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +28,13 @@ import java.util.List;
  */
 
 public final class AppUtils {
+
+    public static final String DIRECTORY_NAME = "WallpaperHD";
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    };
 
     public static List<String> seperateTags(String s) {
         List<String> tags = new ArrayList<>();
@@ -97,5 +113,53 @@ public final class AppUtils {
         }
         result = result.toLowerCase().substring(0, result.length() - 1);
         return result;
+    }
+
+    public static Bitmap.CompressFormat getCompressFormat(String image) {
+        TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter('.');
+        splitter.setString(image);
+        String end = null;
+        Iterator<String> iterator = splitter.iterator();
+        while (iterator.hasNext()) {
+            end = iterator.next();
+        }
+        if (end.equals(FormatEnum.JPEG.getFormat())
+                || end.equals(FormatEnum.JPG.getFormat()))
+            return Bitmap.CompressFormat.JPEG;
+        else if (end.equals(FormatEnum.PNG.getFormat()))
+            return Bitmap.CompressFormat.PNG;
+        return Bitmap.CompressFormat.WEBP;
+    }
+
+    public static String getSmallImage(String image) {
+//        image = image.replace("_640", "_640");
+        return image;
+    }
+
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ContextCompat.checkSelfPermission(activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
+
+    public static String createImageFileName(Image image) {
+        TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter('.');
+        splitter.setString(image.getWebformatURL());
+        String end = null;
+        Iterator<String> iterator = splitter.iterator();
+        while (iterator.hasNext()) {
+            end = iterator.next();
+        }
+        String name = String.valueOf(image.getId()) + "." + end;
+        return name;
     }
 }
