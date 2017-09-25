@@ -8,4 +8,5 @@
     <string name="favourite_title">Favourite</string>
     <string name="complaint_title">Complaint</string>
     <string name="similar_images">Similar images</string>
+    <string name="error_message">Could not get images</string>
 </resources>

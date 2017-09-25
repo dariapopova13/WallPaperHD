@@ -62,7 +62,7 @@ public class SingleImageActivity extends AppCompatActivity implements ViewPager.
 
     private void initViewPager() {
         viewPager = (ViewPager) findViewById(R.id.images_view_pager);
-        adapter = new ImageStatePagerAdapter(getSupportFragmentManager(), this);
+        adapter = new ImageStatePagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(this);
 
@@ -149,23 +149,19 @@ public class SingleImageActivity extends AppCompatActivity implements ViewPager.
 
     public class ImageStatePagerAdapter extends FragmentStatePagerAdapter {
 
-        public int NUM_ITEMS;
-        private Context mContext;
 
-        public ImageStatePagerAdapter(FragmentManager fm, Context mContext) {
+        public ImageStatePagerAdapter(FragmentManager fm) {
             super(fm);
-            this.mContext = mContext;
-            NUM_ITEMS = images.size();
         }
 
         @Override
         public Fragment getItem(int position) {
-            return SingleImageFragment.newInstance(position, mContext, images.get(position));
+            return SingleImageFragment.newInstance(images.get(position));
         }
 
         @Override
         public int getCount() {
-            return NUM_ITEMS;
+            return images.size();
         }
     }
 }

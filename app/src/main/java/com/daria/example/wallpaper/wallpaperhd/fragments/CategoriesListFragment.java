@@ -42,7 +42,6 @@ public class CategoriesListFragment extends Fragment implements SwipeRefreshLayo
     private SwipeRefreshLayout swipeRefreshLayout;
     private ApiInterface apiService;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {

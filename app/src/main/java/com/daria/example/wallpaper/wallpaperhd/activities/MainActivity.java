@@ -47,13 +47,16 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         ViewPagerAdaper adaper = new ViewPagerAdaper(getSupportFragmentManager());
         adaper.addFragment(new CategoriesListFragment(), getString(R.string.category_title));
-        adaper.addFragment(new GridImagesFragment(createUri(OrderEnum.LATEST)), getString(R.string.new_images_title));
-        adaper.addFragment(new GridImagesFragment(createUri(OrderEnum.POPULAR)), getString(R.string.top_title));
+        adaper.addFragment(GridImagesFragment.newInstance(createUri(OrderEnum.LATEST)),
+                getString(R.string.new_images_title));
+        adaper.addFragment(GridImagesFragment.newInstance(createUri(OrderEnum.POPULAR)),
+                getString(R.string.top_title));
 
 
         viewPager.setAdapter(adaper);
         applyCustomTabView(adaper);
     }
+
 
     private String createUri(OrderEnum order) {
         Uri uri = new UrlUtils.Builder()

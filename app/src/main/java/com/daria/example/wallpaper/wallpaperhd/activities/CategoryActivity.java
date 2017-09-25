@@ -50,7 +50,7 @@ public class CategoryActivity extends AppCompatActivity {
                 .addImageType(ImageTypeEnum.PHOTO)
                 .create(this).getURI().toString();
 
-        gridFragment = new GridImagesFragment(uri);
+        gridFragment = GridImagesFragment.newInstance(uri);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.single_category_images_fragment, gridFragment)
                 .commit();

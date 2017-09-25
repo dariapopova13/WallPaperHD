@@ -15,7 +15,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.daria.example.wallpaper.wallpaperhd.R;
 import com.daria.example.wallpaper.wallpaperhd.activities.SingleImageActivity;
 import com.daria.example.wallpaper.wallpaperhd.data.Image;
-import com.daria.example.wallpaper.wallpaperhd.utilities.AppUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +33,7 @@ public class GridImagesAdapter extends RecyclerView.Adapter<GridImagesAdapter.Gr
     public GridImagesAdapter(List<Image> images, Context mContext) {
         this.images = images;
         this.mContext = mContext;
+
     }
 
     @Override
@@ -54,11 +54,9 @@ public class GridImagesAdapter extends RecyclerView.Adapter<GridImagesAdapter.Gr
 
     private void loadPicture(final GridImageViewHolder holder, String image) {
         if (image != null && !TextUtils.isEmpty(image)) {
-            Glide.with(mContext).load(AppUtils.getSmallImage(image))
+            Glide.with(mContext).load(image)
                     .centerCrop()
-                    .crossFade()
-//                    .asBitmap()
-//                    .toBytes(Bitmap.CompressFormat.JPEG,100)
+                    .placeholder(R.drawable.ic_loading)
                     .thumbnail(1f)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.newImage);
@@ -91,4 +89,5 @@ public class GridImagesAdapter extends RecyclerView.Adapter<GridImagesAdapter.Gr
             imageUrl = (TextView) view.findViewById(R.id.image_grid_url);
         }
     }
+
 }

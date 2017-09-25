@@ -2,7 +2,6 @@ package com.daria.example.wallpaper.wallpaperhd.fragments;
 
 import android.app.WallpaperManager;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -65,25 +64,19 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
     private RecyclerView similarImagesRecycleView;
     private GridImagesAdapter similarImagesAdapter;
     private GridImagesAdapter gridImageAdapter;
-    private Context mContext;
     private FloatingActionButton fab;
-    private int num;
     private TextView favCountTextView;
     private TextView likesCountTextView;
     private TextView downloadsCountTextView;
     private TextView loadedByTextView;
     private ProgressBar fabProgressCircle;
+    private static final String ARG_IMAGE = "image";
 
 
-    public SingleImageFragment(Image image, Context mContext) {
-        this.mContext = mContext;
-        this.image = image;
-    }
-
-    public static SingleImageFragment newInstance(int num, Context mContext, Image image) {
+    public static SingleImageFragment newInstance(Image image) {
         Bundle args = new Bundle();
-        args.putInt("num", num);
-        SingleImageFragment fragment = new SingleImageFragment(image, mContext);
+        args.putParcelable(ARG_IMAGE, image);
+        SingleImageFragment fragment = new SingleImageFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,9 +87,9 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
         switch (id) {
             case R.id.image_save_fab: {
                 Drawable.ConstantState current = fab.getDrawable().getConstantState();
-                if (current.equals(mContext.getDrawable(R.drawable.ic_arrow_downward_white_24dp).getConstantState())) {
+                if (current.equals(getContext().getDrawable(R.drawable.ic_arrow_downward_white_24dp).getConstantState())) {
                     saveImage();
-                } else if (current.equals(mContext.getDrawable(R.drawable.ic_get_app_white_24dp).getConstantState())) {
+                } else if (current.equals(getContext().getDrawable(R.drawable.ic_get_app_white_24dp).getConstantState())) {
                     applyImageAsBackground();
                 }
                 break;
@@ -115,8 +108,8 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
             Bitmap imageBitmap = BitmapFactory.decodeFile(AppUtils.getImagePath(image));
             wallpaperManager.setBitmap(imageBitmap);
             wallpaperManager.suggestDesiredDimensions(imageBitmap.getWidth(), imageBitmap.getHeight());
-            fab.setImageDrawable(mContext.getDrawable(R.drawable.ic_check_white_24dp));
-            fab.setBackgroundTintList(ContextCompat.getColorStateList(mContext, R.color.colorCheckFab));
+            fab.setImageDrawable(getContext().getDrawable(R.drawable.ic_check_white_24dp));
+            fab.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.colorCheckFab));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -136,9 +129,11 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        num = getArguments() != null ? getArguments().getInt("num") : 1;
+    public void onCreate(@Nullable Bundle args) {
+        super.onCreate(args);
+        image = getArguments().getParcelable(ARG_IMAGE);
+        if (image == null)
+            getActivity().finish();
     }
 
     @Nullable
@@ -146,7 +141,7 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_single_image, container, false);
-        view.setBackgroundColor(AppUtils.getRandomColorId(mContext));
+        view.setBackgroundColor(AppUtils.getRandomColorId(getContext()));
 
         initViews(view);
         createRecycleView();
@@ -172,7 +167,7 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
 
     private void getFabCurrentState() {
 //        if (MockUtils.isDownloaded(imageUrl))
-//            fab.setImageDrawable(mContext.getDrawable(R.drawable.ic_get_app_white_24dp));
+//            fab.setImageDrawable(getContext().getDrawable(R.drawable.ic_get_app_white_24dp));
     }
 
     private void initViews(View view) {
@@ -189,14 +184,14 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
     }
 
     private void createRecycleView() {
-        tagsAdapter = new TagsAdapter(mContext, image.getTags());
-        RecyclerView.LayoutManager tagLayoutManager = new LinearLayoutManager(mContext,
+        tagsAdapter = new TagsAdapter(getContext(), image.getTags());
+        RecyclerView.LayoutManager tagLayoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false);
 
         tagsRecycleView.setAdapter(tagsAdapter);
         tagsRecycleView.setLayoutManager(tagLayoutManager);
 
-        RecyclerView.LayoutManager similarImagesLayoutManager = new GridLayoutManager(mContext, 2);
+        RecyclerView.LayoutManager similarImagesLayoutManager = new GridLayoutManager(getContext(), 2);
 
         similarImagesRecycleView.setLayoutManager(similarImagesLayoutManager);
         similarImagesRecycleView.setNestedScrollingEnabled(false);
@@ -218,7 +213,7 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
                 .addQuery(AppUtils.createQuery(image.getTags()))
                 .addPerPage(20)
                 .addOrder(OrderEnum.POPULAR)
-                .create(mContext).getURI().toString();
+                .create(getContext()).getURI().toString();
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<ImageResponse> call = apiService.getImages(uri);
@@ -233,7 +228,7 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
                     similarImages.add(image);
                 }
                 if (similarImagesAdapter == null) {
-                    similarImagesAdapter = new GridImagesAdapter(similarImages, mContext);
+                    similarImagesAdapter = new GridImagesAdapter(similarImages, getContext());
                     similarImagesRecycleView.setAdapter(similarImagesAdapter);
                 } else similarImagesAdapter.notifyDataSetChanged();
             }
@@ -270,7 +265,7 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
 
 
             fabProgressCircle.setVisibility(View.GONE);
-            fab.setImageDrawable(mContext.getDrawable(R.drawable.ic_get_app_white_24dp));
+            fab.setImageDrawable(getContext().getDrawable(R.drawable.ic_get_app_white_24dp));
         }
 
         private boolean createImageFile() {
@@ -297,7 +292,7 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
         protected Void doInBackground(Void... voids) {
             if (!createImageFile()) return null;
             try {
-                Bitmap saveImage = Glide.with(mContext).load(image.getWebformatURL())
+                Bitmap saveImage = Glide.with(getContext()).load(image.getWebformatURL())
                         .asBitmap()
                         .into(-1, -1)
                         .get();

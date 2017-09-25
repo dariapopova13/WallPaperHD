@@ -37,15 +37,22 @@ public class GridImagesFragment extends Fragment implements SwipeRefreshLayout.O
     private SwipeRefreshLayout swipeRefreshLayout;
     private ActionMode actionMode;
     private String currentUri;
+    private static final String ARG_URI = "uri";
 
 
-    public GridImagesFragment(String currentUri) {
-        this.currentUri = currentUri;
+    public static GridImagesFragment newInstance(String uri) {
+
+        Bundle args = new Bundle();
+        args.putString(ARG_URI, uri);
+        GridImagesFragment fragment = new GridImagesFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(@Nullable Bundle args) {
+        super.onCreate(args);
+        currentUri = getArguments().getString(ARG_URI, "");
         getImages();
     }
 
@@ -57,13 +64,13 @@ public class GridImagesFragment extends Fragment implements SwipeRefreshLayout.O
 
         gridRecycleView = (RecyclerView) view.findViewById(R.id.grid_images_recycle_view);
 
+
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(view.getContext(), 2);
 
         gridRecycleView.setLayoutManager(layoutManager);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.grid_images_swipe_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
-
         return view;
     }
 
@@ -103,7 +110,7 @@ public class GridImagesFragment extends Fragment implements SwipeRefreshLayout.O
 
         @Override
         public void onFailure(Call<ImageResponse> call, Throwable t) {
-            t.printStackTrace();
+
         }
     }
 

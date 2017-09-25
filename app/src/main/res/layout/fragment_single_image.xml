@@ -35,40 +35,6 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <!--<com.github.jorgecastilloprz.FABProgressCircle-->
-    <!--android:id="@+id/loading_picture_progress_bar"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_margin="@dimen/image_fab_margin"-->
-    <!--app:arcColor="@android:color/white"-->
-    <!--app:arcWidth="2dp"-->
-    <!--app:circleSize="normal"-->
-    <!--app:elevation="10dp"-->
-    <!--app:layout_anchor="@id/image_app_bar"-->
-    <!--app:layout_anchorGravity="bottom|right|end">-->
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-    <!--android:id="@+id/image_save_fab"-->
-    <!--android:layout_width="60dp"-->
-    <!--android:layout_height="60dp"-->
-    <!--android:layout_margin="@dimen/image_fab_margin"-->
-    <!--android:clickable="true"-->
-    <!--android:padding="20dp"-->
-    <!--android:src="@drawable/ic_arrow_downward_white_24dp"-->
-    <!--app:backgroundTint="@color/colorAccent"-->
-    <!--app:elevation="10dp"-->
-    <!--app:layout_anchor="@id/image_app_bar"-->
-    <!--app:layout_anchorGravity="bottom|right|end"/>-->
-    <!--&lt;!&ndash;</com.github.jorgecastilloprz.FABProgressCircle>&ndash;&gt;-->
-
-    <!--<ProgressBar-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:elevation="12dp"-->
-    <!--app:layout_anchor="@id/image_app_bar"-->
-    <!--app:layout_anchorGravity="bottom|right|end"/>-->
-
-
     <RelativeLayout
 
         android:layout_width="wrap_content"
@@ -94,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:elevation="12dp"
+            app:elevation="12dp"
             android:visibility="invisible"/>
     </RelativeLayout>
 
