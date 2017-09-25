@@ -8,14 +8,17 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
 import com.daria.example.wallpaper.wallpaperhd.data.Image;
 import com.daria.example.wallpaper.wallpaperhd.data.enums.FormatEnum;
+import com.daria.example.wallpaper.wallpaperhd.data.enums.ImageMimeTypeEnum;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,11 +59,13 @@ public final class AppUtils {
     }
 
     public static int getDeviceWidth(Context context) {
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        return size.x;
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+
+        return displayMetrics.widthPixels;
     }
 
     public static int getDeviceHeight(Context context) {
@@ -116,13 +121,7 @@ public final class AppUtils {
     }
 
     public static Bitmap.CompressFormat getCompressFormat(String image) {
-        TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter('.');
-        splitter.setString(image);
-        String end = null;
-        Iterator<String> iterator = splitter.iterator();
-        while (iterator.hasNext()) {
-            end = iterator.next();
-        }
+        String end = getImageType(image, '.');
         if (end.equals(FormatEnum.JPEG.getFormat())
                 || end.equals(FormatEnum.JPG.getFormat()))
             return Bitmap.CompressFormat.JPEG;
@@ -151,15 +150,40 @@ public final class AppUtils {
         }
     }
 
-    public static String createImageFileName(Image image) {
-        TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter('.');
-        splitter.setString(image.getWebformatURL());
-        String end = null;
-        Iterator<String> iterator = splitter.iterator();
-        while (iterator.hasNext()) {
-            end = iterator.next();
-        }
+    public static String getImageFileName(Image image) {
+        String end = getImageType(image.getWebformatURL(), '.');
         String name = String.valueOf(image.getId()) + "." + end;
         return name;
+    }
+
+    public static String getImageMimeType(String image) {
+        String type = getImageType(image, '.');
+        if (type.equals(ImageMimeTypeEnum.GIF.getType()))
+            return ImageMimeTypeEnum.GIF.getType();
+        else if (type.equals(ImageMimeTypeEnum.JPEG.getType()))
+            return ImageMimeTypeEnum.JPEG.getType();
+        else if (type.equals(ImageMimeTypeEnum.PNG.getType()))
+            return ImageMimeTypeEnum.PNG.getType();
+        return "";
+    }
+
+    public static String getImageType(String image, char delimeter) {
+        TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter(delimeter);
+        splitter.setString(image);
+        String type = null;
+        Iterator<String> iterator = splitter.iterator();
+        while (iterator.hasNext()) {
+            type = iterator.next();
+        }
+        return type;
+    }
+
+    public static String getApplicationDirectory() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" +
+                AppUtils.DIRECTORY_NAME;
+    }
+
+    public static String getImagePath(Image image) {
+        return getApplicationDirectory() + "/" + getImageFileName(image);
     }
 }
