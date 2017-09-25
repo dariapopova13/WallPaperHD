@@ -1,12 +1,16 @@
 package com.daria.example.wallpaper.wallpaperhd.fragments;
 
+import android.app.WallpaperManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -19,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -67,6 +72,7 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
     private TextView likesCountTextView;
     private TextView downloadsCountTextView;
     private TextView loadedByTextView;
+    private ProgressBar fabProgressCircle;
 
 
     public SingleImageFragment(Image image, Context mContext) {
@@ -104,74 +110,29 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
     }
 
     private void applyImageAsBackground() {
-        fab.setImageDrawable(mContext.getDrawable(R.drawable.ic_check_white_24dp));
-        fab.setBackgroundTintList(ContextCompat.getColorStateList(mContext, R.color.colorCheckFab));
+        WallpaperManager wallpaperManager = WallpaperManager.getInstance(getContext());
+        try {
+            Bitmap imageBitmap = BitmapFactory.decodeFile(AppUtils.getImagePath(image));
+            wallpaperManager.setBitmap(imageBitmap);
+            wallpaperManager.suggestDesiredDimensions(imageBitmap.getWidth(), imageBitmap.getHeight());
+            fab.setImageDrawable(mContext.getDrawable(R.drawable.ic_check_white_24dp));
+            fab.setBackgroundTintList(ContextCompat.getColorStateList(mContext, R.color.colorCheckFab));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Bitmap createScrollableBitmap(Bitmap imageBitmap) {
+//        int height = AppUtils.getDeviceHeight(getContext());
+//        int width = (imageBitmap.getWidth() * AppUtils.getDeviceHeight(getContext())) / imageBitmap.getHeight();
+
+        imageBitmap = Bitmap.createScaledBitmap(imageBitmap, imageBitmap.getWidth(),
+                AppUtils.getDeviceHeight(getContext()), true);
+        return imageBitmap;
     }
 
     private void saveImage() {
         new SaveImageAsyncTask().execute();
-    }
-
-
-    private class SaveImageAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private FileOutputStream out;
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            fab.setImageDrawable(mContext.getDrawable(R.drawable.ic_get_app_white_24dp));
-        }
-
-        private boolean createImageFile() {
-            File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    AppUtils.DIRECTORY_NAME);
-
-            boolean isCreated = false;
-
-            try {
-                if (!dir.exists())
-                    dir.mkdir();
-                File imageFile = new File(dir, AppUtils.createImageFileName(image));
-                if (!imageFile.exists())
-                    isCreated = imageFile.createNewFile();
-                if (isCreated)
-                    out = new FileOutputStream(imageFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return isCreated;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            if (!createImageFile()) return null;
-            try {
-                Bitmap saveImage = Glide.with(mContext).load(image.getWebformatURL())
-                        .asBitmap()
-                        .into(-1, -1)
-                        .get();
-                saveImage.compress(Bitmap.CompressFormat.PNG, 100, out);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } finally {
-                closeStream(out);
-            }
-
-            return null;
-        }
-
-        private void closeStream(FileOutputStream out) {
-            try {
-                if (out != null)
-                    out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
@@ -205,7 +166,8 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
 
     private void createFabCircle() {
         fab.setOnClickListener(this);
-        getFabCurrentState();
+
+//        getFabCurrentState();
     }
 
     private void getFabCurrentState() {
@@ -214,6 +176,7 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
     }
 
     private void initViews(View view) {
+        fabProgressCircle = (ProgressBar) view.findViewById(R.id.image_loading_progress_bar);
         tagsRecycleView = (RecyclerView) view.findViewById(R.id.image_tags_recycle_view);
         similarImagesRecycleView = (RecyclerView) view.findViewById(R.id.similar_images_recycle_view);
         imageView = (ImageView) view.findViewById(R.id.single_image);
@@ -280,5 +243,85 @@ public class SingleImageFragment extends Fragment implements View.OnClickListene
 
             }
         });
+    }
+
+    private class SaveImageAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private FileOutputStream out;
+        private String imagePath;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            fabProgressCircle.getIndeterminateDrawable().setColorFilter(AppUtils.getRandomColorId(getContext()), PorterDuff.Mode.MULTIPLY);
+            fab.setImageResource(0);
+            fabProgressCircle.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            ContentValues values = new ContentValues();
+
+            values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+            values.put(MediaStore.Images.Media.MIME_TYPE, AppUtils.getImageMimeType(image.getWebformatURL()));
+            values.put(MediaStore.Images.Media.DATA, imagePath);
+
+            getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+
+            fabProgressCircle.setVisibility(View.GONE);
+            fab.setImageDrawable(mContext.getDrawable(R.drawable.ic_get_app_white_24dp));
+        }
+
+        private boolean createImageFile() {
+            File dir = new File(AppUtils.getApplicationDirectory());
+
+            boolean isCreated = false;
+            File imageFile = null;
+            try {
+                if (!dir.exists())
+                    dir.mkdir();
+                imageFile = new File(dir, AppUtils.getImageFileName(image));
+                if (!imageFile.exists())
+                    isCreated = imageFile.createNewFile();
+                if (isCreated)
+                    out = new FileOutputStream(imageFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            imagePath = imageFile.getAbsolutePath();
+            return isCreated;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (!createImageFile()) return null;
+            try {
+                Bitmap saveImage = Glide.with(mContext).load(image.getWebformatURL())
+                        .asBitmap()
+                        .into(-1, -1)
+                        .get();
+                saveImage.compress(Bitmap.CompressFormat.PNG, 100, out);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } finally {
+                closeStream(out);
+            }
+
+            return null;
+        }
+
+        private void closeStream(FileOutputStream out) {
+            try {
+                if (out != null) {
+                    out.flush();
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
